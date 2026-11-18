@@ -26,7 +26,7 @@ resource "aws_subnet" "ts_public_subnet" {
 }
 
 resource "aws_subnet" "ts_private_subnet" {
-  availability_zone = "us-east-1a"
+  availability_zone = "eu-north-1a"
   vpc_id     = aws_vpc.ts_vpc.id
   cidr_block        	= "${cidrsubnet(aws_vpc.ts_vpc.cidr_block, 5, 1)}"
 
@@ -37,7 +37,7 @@ resource "aws_subnet" "ts_private_subnet" {
 
 resource "aws_subnet" "ts_database_subnet" {
   vpc_id     = aws_vpc.ts_vpc.id
-  availability_zone = "us-east-1b"
+  availability_zone = "eu-north-1b"
   cidr_block        	= "${cidrsubnet(aws_vpc.ts_vpc.cidr_block, 7, 1)}"
  
   tags = {
