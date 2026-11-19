@@ -191,7 +191,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "ts_frontend_server" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
-  vpc_security_group_ids = [aws_default_security_group.public_server.id]
+  vpc_security_group_ids = [aws_security_group.public_server.id]
   tags = {
     Name = "frontend server"
   }
@@ -200,7 +200,7 @@ resource "aws_instance" "ts_frontend_server" {
 resource "aws_instance" "ts_backend_server" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
-  vpc_security_group_ids = [aws_default_security_group.private_server.id]
+  vpc_security_group_ids = [aws_security_group.private_server.id]
 
   tags = {
     Name = "backend server"
