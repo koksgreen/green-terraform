@@ -116,7 +116,7 @@ resource "aws_nat_gateway" "ts_ng" {
   depends_on = [aws_internet_gateway.ts_gw]
 }
 
-resource "aws_default_security_group" "public_server" {
+resource "aws_security_group" "public_server" {
   vpc_id = aws_vpc.ts_vpc.id
 
   ingress {
@@ -134,7 +134,7 @@ resource "aws_default_security_group" "public_server" {
   }
 }
 
-resource "aws_default_security_group" "private_server" {
+resource "aws_security_group" "private_server" {
   vpc_id = aws_vpc.ts_vpc.id
 
   ingress {
@@ -153,7 +153,7 @@ resource "aws_default_security_group" "private_server" {
 }
 
 
-resource "aws_default_security_group" "database_server" {
+resource "aws_security_group" "database_server" {
   vpc_id = aws_vpc.ts_vpc.id
 
   ingress {
