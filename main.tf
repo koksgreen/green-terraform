@@ -36,8 +36,8 @@ resource "aws_subnet" "ts_private_subnet" {
 }
 
 resource "aws_subnet" "ts_database_subnet" {
-  availability_zone = "eu-north-1b"
   vpc_id     = aws_vpc.ts_vpc.id
+  availability_zone = "us-east-1b"
   cidr_block        	= "${cidrsubnet(aws_vpc.ts_vpc.cidr_block, 7, 1)}"
  
   tags = {
@@ -116,7 +116,7 @@ resource "aws_nat_gateway" "ts_ng" {
   depends_on = [aws_internet_gateway.ts_gw]
 }
 
-resource "aws_security_group" "public_server" {
+resource "aws_default_security_group" "public_server" {
   vpc_id = aws_vpc.ts_vpc.id
 
   ingress {
@@ -134,7 +134,7 @@ resource "aws_security_group" "public_server" {
   }
 }
 
-resource "aws_security_group" "private_server" {
+resource "aws_default_security_group" "private_server" {
   vpc_id = aws_vpc.ts_vpc.id
 
   ingress {
@@ -153,7 +153,7 @@ resource "aws_security_group" "private_server" {
 }
 
 
-resource "aws_security_group" "database_server" {
+resource "aws_default_security_group" "database_server" {
   vpc_id = aws_vpc.ts_vpc.id
 
   ingress {
@@ -191,7 +191,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "ts_frontend_server" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
-  vpc_security_group_ids = [aws_security_group.public_server.id]
+  vpc_security_group_ids = [aws_default_security_group.public_server.id]
   tags = {
     Name = "frontend server"
   }
@@ -200,7 +200,7 @@ resource "aws_instance" "ts_frontend_server" {
 resource "aws_instance" "ts_backend_server" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t3.micro"
-  vpc_security_group_ids = [aws_security_group.private_server.id]
+  vpc_security_group_ids = [aws_default_security_group.private_server.id]
 
   tags = {
     Name = "backend server"
