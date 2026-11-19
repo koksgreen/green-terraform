@@ -36,8 +36,8 @@ resource "aws_subnet" "ts_private_subnet" {
 }
 
 resource "aws_subnet" "ts_database_subnet" {
+  availability_zone = "eu-north-1b"
   vpc_id     = aws_vpc.ts_vpc.id
-  availability_zone = "us-east-1b"
   cidr_block        	= "${cidrsubnet(aws_vpc.ts_vpc.cidr_block, 7, 1)}"
  
   tags = {
