@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: 'Type "destroy" to delete ALL infrastructure managed by this project'
+        description: 'Type the word destroy (lowercase, no quotes) to delete ALL infrastructure managed by this project'
         required: true
         type: string
 
@@ -27,9 +27,24 @@ jobs:
   terraform:
     name: Terraform destroy
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && inputs.confirm == 'destroy'
 
     steps:
+      # The job always starts, and fails with a clear message instead of being skipped.
+      - name: Check confirmation
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+          REF: ${{ github.ref }}
+        run: |
+          if [ "$REF" != "refs/heads/main" ]; then
+            echo "::error::Run this workflow from the main branch (you chose: $REF)."
+            exit 1
+          fi
+          if [ "$CONFIRM" != "destroy" ]; then
+            echo "::error::Confirmation text must be exactly: destroy"
+            exit 1
+          fi
+          echo "Confirmation accepted."
+
       - name: Checkout
         uses: actions/checkout@v4
 
